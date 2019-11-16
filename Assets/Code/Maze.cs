@@ -60,10 +60,12 @@ public class Maze : MonoBehaviour
             score_value = score_value + 1;
             score.text = "Score: " + score_value.ToString(); 
             print(score.text);
+            
             //Destroy(col.transform.gameObject);
             /*if(score_value == 3){
                 UnityEngine.SceneManagement.SceneManager.LoadScene("BadRequest");                
             }*/
+           
             col.transform.position = new Vector2(Random.Range(-7, 7), Random.Range(4, -5));
         }
     }
