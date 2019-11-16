@@ -6,7 +6,7 @@ TagManager:
   tags:
   - Maze
   - Character
-  - Price
+  - Prize
   layers:
   - Default
   - TransparentFX

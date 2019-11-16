@@ -5,6 +5,13 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class BadRequest : MonoBehaviour, IPointerClickHandler {
+
+    public Text score;
+
+    void Start()
+    {        
+        score.text = "Score: " + Maze.getValue().ToString(); 
+    }
  
     public void OnPointerClick(PointerEventData eventData)
     {

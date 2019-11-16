@@ -6,13 +6,15 @@ using UnityEngine.UI;
 public class Maze : MonoBehaviour
 {
     public Text score;
-    private int score_value;
+    public Text timer;
+    private static int score_value;    
 
     // Start is called before the first frame update
     void Start()
     {        
         score_value = 0;
         score.text = "Score: " + score_value.ToString(); 
+        StartCoroutine(reloadTimer(30));
     }
 
     // Update is called once per frame
@@ -47,24 +49,42 @@ public class Maze : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Maze"))
-        {
-            print("Juego Terminado " + col.name);            
-            UnityEngine.SceneManagement.SceneManager.LoadScene("BadRequest");
+        { //Reset position if the principal object touch the maze
+            var newPos = transform.position;
+            newPos.x = -7.61f;
+            newPos.y = 3.39f;
+            transform.position = newPos;
         }
-        else if (col.CompareTag("Price"))
-        {
-            print("Price " + col.name);
+        else if (col.CompareTag("Prize"))
+        { //Increase the score and appear a new prize.
             score_value = score_value + 1;
             score.text = "Score: " + score_value.ToString(); 
             print(score.text);
-            Destroy(col.transform.gameObject);
-
-            if(score_value == 3){
+            //Destroy(col.transform.gameObject);
+            /*if(score_value == 3){
                 UnityEngine.SceneManagement.SceneManager.LoadScene("BadRequest");                
-            }
-
-            //tail.Add(Instantiate(tailPrefab, tail[tail.Count - 1].position, Quaternion.identity).transform);
-            //col.transform.position = new Vector2(Random.Range(horizontalLimits.x, horizontalLimits.y), Random.Range(verticalLimits.x, verticalLimits.y));
+            }*/
+            col.transform.position = new Vector2(Random.Range(-7, 7), Random.Range(4, -5));
         }
+    }
+
+    IEnumerator reloadTimer(float reloadTimeInSeconds)
+    {
+        float counter = reloadTimeInSeconds;
+
+        while (counter > 0)
+        {
+            counter -= Time.deltaTime;
+            timer.text = counter.ToString();
+            yield return null;
+        }
+
+        //Load new Scene
+        //SceneManager.LoadScene(0);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("BadRequest");
+    }
+
+    public static int getValue () {
+        return score_value;
     }
 }
