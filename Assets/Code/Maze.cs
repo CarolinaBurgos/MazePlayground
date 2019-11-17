@@ -8,10 +8,11 @@ public class Maze : MonoBehaviour
 {
     public Text score;
     public Text timer;
-    
+    public GameObject coin;
+
     private static int score_value;    
     private GameObject[] maze;
-    private GameObject character;
+    private GameObject character;    
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,13 @@ public class Maze : MonoBehaviour
         score.text = "Score: " + score_value.ToString(); 
         maze = GameObject.FindGameObjectsWithTag("Enemy");
         character = GameObject.FindWithTag("Character");
+        
+        var coin_position = coin.transform.position;
+        coin_position.x = Random.Range(-5.55f, 5.10f);
+        coin_position.y = Random.Range(-2.5f, 2.5f);
+        coin.transform.position = coin_position; 
+
+        Collide_Prizes(coin.GetComponent<Collider2D>());
         StartCoroutine(reloadTimer(30));
     }
 
