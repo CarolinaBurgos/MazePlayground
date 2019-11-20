@@ -9,6 +9,7 @@ public class Maze : MonoBehaviour
     public Text score;
     public Text timer;
     public GameObject coin;
+    public List<GameObject> lives = new List<GameObject>();
 
     private static int score_value;    
     private GameObject[] maze;
@@ -40,22 +41,22 @@ public class Maze : MonoBehaviour
     void Move(){           
         if(Input.GetKey(KeyCode.UpArrow)) {   
             var newPos = transform.position;
-            newPos.y += 0.075f;
+            newPos.y += 0.070f;
             transform.position = newPos;            
         }
         else if(Input.GetKey(KeyCode.DownArrow)) {
             var newPos = transform.position;
-            newPos.y -= 0.075f;
+            newPos.y -= 0.070f;
             transform.position = newPos;
         }
         else if(Input.GetKey(KeyCode.LeftArrow)) {
             var newPos = transform.position;
-            newPos.x -= 0.075f;
+            newPos.x -= 0.070f;
             transform.position = newPos;
         }
         else if(Input.GetKey(KeyCode.RightArrow)) {
             var newPos = transform.position;
-            newPos.x += 0.075f;
+            newPos.x += 0.070f;
             transform.position = newPos;
         } 
     }
@@ -63,7 +64,18 @@ public class Maze : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Maze") | col.CompareTag("Enemy"))
-        { //Reset position if the principal object touch the maze
+        { 
+            if(lives.Count > 0) { //Delete starts that represents the lives of the character             
+                GameObject toDestroy = lives[lives.Count - 1]; 
+                lives.RemoveAt(lives.Count - 1);  
+                Destroy(toDestroy);  
+            } 
+            
+            if(lives.Count == 0) { //Load new scene if the character lose all his lives
+                UnityEngine.SceneManagement.SceneManager.LoadScene("EndGameScene");
+            }
+
+            //Reset position if the principal object touch the maze
             var newPos = transform.position;
             newPos.x = -4.87f;
             newPos.y = 1.73f;
@@ -103,13 +115,13 @@ public class Maze : MonoBehaviour
     {
         float counter = reloadTimeInSeconds;
 
-        while (counter > 0)
+        while (counter > 0.5)
         {
             counter -= Time.deltaTime;
             timer.text = counter.ToString();
             yield return null;
         }
-        //Load new Scene
+        //Load new scene if the time is over
         UnityEngine.SceneManagement.SceneManager.LoadScene("EndGameScene");
     }
 
